@@ -1,0 +1,247 @@
+@import './base.css';
+
+#app {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+a,
+.green {
+  text-decoration: none;
+  color: hsla(160, 100%, 37%, 1);
+  transition: 0.4s;
+  padding: 3px;
+}
+
+@media (hover: hover) {
+  a:hover {
+    background-color: hsla(160, 100%, 37%, 0.2);
+  }
+}
+
+:root {
+  --color-accent: #409eff;
+  --color-accent-soft: #ecf5ff;
+  --radius-md: 10px;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.1);
+
+  --color-hot-bg: #fff1f0;
+  --color-hot-text: #cf1322;
+  --color-cool-bg: #e6f4ff;
+  --color-cool-text: #0958d9;
+
+  --color-status-bg: #f0f9eb;
+  --color-status-text: #2b8a3e;
+  --color-status-border: #b7eb8f;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-accent-soft: rgba(64, 158, 255, 0.15);
+    --color-hot-bg: rgba(207, 19, 34, 0.18);
+    --color-cool-bg: rgba(9, 88, 217, 0.18);
+    --color-status-bg: rgba(43, 138, 62, 0.18);
+    --color-status-border: rgba(183, 235, 143, 0.35);
+  }
+}
+
+header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding: 0.9rem 1.5rem;
+  background: var(--color-background);
+  border-bottom: 1px solid var(--color-border);
+}
+
+header nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+header nav a {
+  padding: 0.4rem 0.8rem;
+  border-radius: 999px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--color-text);
+  text-decoration: none;
+  transition:
+    background-color 0.15s,
+    color 0.15s;
+}
+
+header nav a:hover {
+  background: var(--color-background-soft);
+}
+
+header nav a.router-link-exact-active {
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+}
+
+.unit-toggler {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--color-text);
+  white-space: nowrap;
+}
+
+.practice-section {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+.practice-section h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--color-heading);
+  margin-bottom: 0.25rem;
+}
+
+.practice-section h3 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--color-heading);
+  margin: 1.5rem 0 0.75rem;
+}
+
+.practice-section label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+  margin-right: 1.25rem;
+  cursor: pointer;
+}
+
+.practice-section ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.practice-section li {
+  padding: 0.9rem 1.1rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-background-soft);
+  box-shadow: var(--shadow-sm);
+  transition:
+    box-shadow 0.15s,
+    border-color 0.15s;
+}
+
+.practice-section li:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-border-hover);
+}
+
+.practice-section li a {
+  color: var(--color-accent);
+  font-weight: 500;
+}
+
+.practice-section li a:hover {
+  text-decoration: underline;
+}
+
+.practice-section li p {
+  margin-bottom: 0.25rem;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  margin: 0.4rem 0.4rem 0.4rem 0;
+}
+
+.badge.hot {
+  background: var(--color-hot-bg);
+  color: var(--color-hot-text);
+}
+
+.badge.cool {
+  background: var(--color-cool-bg);
+  color: var(--color-cool-text);
+}
+
+.status-bar {
+  margin-top: 1.5rem;
+  padding: 0.75rem 1rem;
+  text-align: center;
+  font-weight: 600;
+  color: var(--color-status-text);
+  background: var(--color-status-bg);
+  border: 1px solid var(--color-status-border);
+  border-radius: var(--radius-md);
+}
+
+button:not([class*='el-']) {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-background);
+  color: var(--color-text);
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition:
+    background-color 0.15s,
+    border-color 0.15s;
+}
+
+button:not([class*='el-']):hover:not(:disabled) {
+  background: var(--color-background-soft);
+  border-color: var(--color-border-hover);
+}
+
+button:not([class*='el-']):disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+input[type='text'],
+input[type='number'],
+select {
+  padding: 0.5rem 0.7rem;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-background);
+  color: var(--color-text);
+  font-size: 0.9rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+
+th,
+td {
+  padding: 0.6rem 0.8rem;
+  border-bottom: 1px solid var(--color-border);
+  text-align: left;
+}
+
+thead th {
+  color: var(--color-heading);
+  font-weight: 600;
+  background: var(--color-background-soft);
+}
