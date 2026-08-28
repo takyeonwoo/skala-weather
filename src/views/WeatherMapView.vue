@@ -7,11 +7,7 @@ import { useConfigStore } from '@/stores/configStore.js'
 
 const configStore = useConfigStore()
 
-const OWM_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY
-const DATA_KEY = import.meta.env.VITE_DATA_GO_KR_KEY
-
-const OWM_URL = 'https://api.openweathermap.org/data/2.5/weather'
-const KMA_URL = 'https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst'
+const PROXY_URL = '/api/weather'
 const AIR_URL = 'https://air-quality-api.open-meteo.com/v1/air-quality'
 
 const MODES = [
@@ -108,8 +104,8 @@ const displayTemp = (temp) => {
 const fetchTemp = async () => {
     const responses = await Promise.all(
         koreaRegions.map((region) =>
-            axios.get(OWM_URL, {
-                params: { q: region.query, appid: OWM_KEY, units: 'metric', lang: 'kr' },
+            axios.get(PROXY_URL, {
+                params: { source: 'current', q: region.query, units: 'metric', lang: 'kr' },
             }),
         ),
     )
@@ -146,9 +142,9 @@ const fetchRain = async () => {
 
     for (const region of koreaRegions) {
         try {
-            const res = await axios.get(KMA_URL, {
+            const res = await axios.get(PROXY_URL, {
                 params: {
-                    serviceKey: DATA_KEY,
+                    source: 'kma',
                     dataType: 'JSON',
                     numOfRows: 100,
                     pageNo: 1,
@@ -200,15 +196,11 @@ const fetchAll = async () => {
         messages.value.push(`기온 조회 실패 (${error.response?.status ?? '네트워크 오류'})`)
     }
 
-    if (!DATA_KEY) {
-        messages.value.push('강수량은 공공데이터포털 키(VITE_DATA_GO_KR_KEY)가 필요합니다.')
-    } else {
-        try {
-            await fetchRain()
-        } catch (error) {
-            console.error('강수량 조회 실패:', error)
-            messages.value.push('강수량 조회 실패 (기상청)')
-        }
+    try {
+        await fetchRain()
+    } catch (error) {
+        console.error('강수량 조회 실패:', error)
+        messages.value.push('강수량 조회 실패 (기상청)')
     }
 
     try {

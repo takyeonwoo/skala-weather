@@ -21,8 +21,7 @@ const weatherList = ref([])
 const isLoading = ref(false)
 const errorMessage = ref('')
 
-const API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY
-const BASE_URL = 'https://api.openweathermap.org/data/2.5/weather'
+const BASE_URL = '/api/weather'
 
 const fetchWeather = async () => {
     isLoading.value = true
@@ -31,7 +30,7 @@ const fetchWeather = async () => {
     try {
         const requests = cityList.map((city) =>
             axios.get(BASE_URL, {
-                params: { q: city.query, appid: API_KEY, units: 'metric', lang: 'kr' },
+                params: { source: 'current', q: city.query, units: 'metric', lang: 'kr' },
             }),
         )
 

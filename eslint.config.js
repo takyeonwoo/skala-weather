@@ -21,6 +21,16 @@ export default defineConfig([
     },
   },
 
+  {
+    name: 'app/server-side-files',
+    files: ['api/**/*.js', 'vite.config.js'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
+    },
+  },
+
   js.configs.recommended,
   ...pluginVue.configs['flat/essential'],
 

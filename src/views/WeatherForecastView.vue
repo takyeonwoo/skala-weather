@@ -18,8 +18,7 @@ const cityList = [
     { id: 'city_08', name: '제주', query: 'Jeju' },
 ]
 
-const API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY
-const FORECAST_URL = 'https://api.openweathermap.org/data/2.5/forecast'
+const FORECAST_URL = '/api/weather'
 
 const cityInfo = ref(null)
 const forecastList = ref([])
@@ -38,7 +37,7 @@ const fetchForecast = async () => {
 
     try {
         const res = await axios.get(FORECAST_URL, {
-            params: { q: cityInfo.value.query, appid: API_KEY, units: 'metric', lang: 'kr' },
+            params: { source: 'forecast', q: cityInfo.value.query, units: 'metric', lang: 'kr' },
         })
 
         forecastList.value = res.data.list
