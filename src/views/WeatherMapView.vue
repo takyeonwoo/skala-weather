@@ -37,9 +37,18 @@ const LEGENDS = {
     ],
 }
 
+const PTY_LABELS = {
+    '0': '없음',
+    '1': '비',
+    '2': '비/눈',
+    '3': '눈',
+    '4': '소나기',
+}
+
 const mode = ref('temp')
 const tempMap = ref({})
 const rainMap = ref({})
+const ptyMap = ref({})
 const dustMap = ref({})
 const weatherMap = ref({})
 const selectedId = ref('')
@@ -119,7 +128,6 @@ const fetchTemp = async () => {
             name: region.name,
             station: res.data.name,
             temp,
-            status: res.data.weather[0].description,
             humidity: res.data.main.humidity,
             wind: res.data.wind.speed,
         }
@@ -139,6 +147,7 @@ const baseDateTime = () => {
 const fetchRain = async () => {
     const { date, time } = baseDateTime()
     const rains = {}
+    const ptys = {}
 
     for (const region of koreaRegions) {
         try {
@@ -155,15 +164,22 @@ const fetchRain = async () => {
                 },
             })
             const items = res.data?.response?.body?.items?.item ?? []
+
             const rn1 = items.find((it) => it.category === 'RN1')
             const raw = Number(rn1?.obsrValue)
             rains[region.id] = Number.isFinite(raw) ? raw : 0
+
+            const pty = items.find((it) => it.category === 'PTY')
+            if (pty) {
+                ptys[region.id] = PTY_LABELS[pty.obsrValue] ?? `알 수 없음(${pty.obsrValue})`
+            }
         } catch (error) {
             console.warn(`${region.name} 강수량 조회 실패, 건너뜀:`, error.message)
         }
     }
 
     rainMap.value = rains
+    ptyMap.value = ptys
 }
 
 const fetchDust = async () => {
@@ -257,10 +273,10 @@ onMounted(fetchAll)
                     </div>
 
                     <div class="detail-body">
-                        <div class="detail-row">
+                        <div class="detail-row" v-if="ptyMap[selectedId] !== undefined">
                             <span class="detail-icon">🌤️</span>
-                            <span class="detail-label">기상 현황</span>
-                            <span class="detail-value">{{ weatherMap[selectedId].status }}</span>
+                            <span class="detail-label">강수 형태</span>
+                            <span class="detail-value">{{ ptyMap[selectedId] }}</span>
                         </div>
                         <div class="detail-row">
                             <span class="detail-icon">🌡️</span>
