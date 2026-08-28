@@ -31,8 +31,9 @@ const levelOf = (id) => {
         return 1
     }
     if (props.mode === 'rain') {
-        if (v >= 20) return 4
-        if (v >= 5) return 3
+        if (v >= 30) return 5
+        if (v >= 15) return 4
+        if (v >= 3) return 3
         if (v > 0) return 2
         return 1
     }
@@ -133,7 +134,8 @@ const labelText = (id) => {
 .mode-rain.lv-1 { fill: #e9ecef; }
 .mode-rain.lv-2 { fill: #a5d8ff; }
 .mode-rain.lv-3 { fill: #4dabf7; }
-.mode-rain.lv-4 { fill: #1864ab; }
+.mode-rain.lv-4 { fill: #1c7ed6; }
+.mode-rain.lv-5 { fill: #0b4a8f; }
 
 .mode-dust.lv-1 { fill: #63e6be; }
 .mode-dust.lv-2 { fill: #ffe066; }

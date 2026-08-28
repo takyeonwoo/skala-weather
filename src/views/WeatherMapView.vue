@@ -24,9 +24,10 @@ const LEGENDS = {
         { cls: 'mode-temp lv-1', text: '20도 미만' },
     ],
     rain: [
-        { cls: 'mode-rain lv-4', text: '20mm 이상' },
-        { cls: 'mode-rain lv-3', text: '5~20mm' },
-        { cls: 'mode-rain lv-2', text: '0~5mm' },
+        { cls: 'mode-rain lv-5', text: '매우 강한 30mm~' },
+        { cls: 'mode-rain lv-4', text: '강한 15~30mm' },
+        { cls: 'mode-rain lv-3', text: '보통 3~15mm' },
+        { cls: 'mode-rain lv-2', text: '약한 ~3mm' },
         { cls: 'mode-rain lv-1', text: '비 없음' },
     ],
     dust: [
@@ -37,12 +38,22 @@ const LEGENDS = {
     ],
 }
 
-const PTY_LABELS = {
-    '0': '없음',
-    '1': '비',
-    '2': '비/눈',
-    '3': '눈',
-    '4': '소나기',
+const rainIntensity = (mm) => {
+    if (mm >= 30) return '매우 강한'
+    if (mm >= 15) return '강한'
+    if (mm >= 3) return '보통'
+    return '약한'
+}
+
+const describePrecipitation = (ptyCode, mm) => {
+    if (ptyCode === '0') return '없음'
+    if (ptyCode === '2') return '진눈깨비'
+    if (ptyCode === '3') return '눈'
+
+    const form = ptyCode === '4' ? '소나기' : ptyCode === '1' ? '비' : null
+    if (!form) return `알 수 없음(${ptyCode})`
+
+    return mm > 0 ? `${rainIntensity(mm)} ${form}` : form
 }
 
 const mode = ref('temp')
@@ -92,8 +103,9 @@ const heroLevel = computed(() => {
         return 1
     }
     if (mode.value === 'rain') {
-        if (v >= 20) return 4
-        if (v >= 5) return 3
+        if (v >= 30) return 5
+        if (v >= 15) return 4
+        if (v >= 3) return 3
         if (v > 0) return 2
         return 1
     }
@@ -171,7 +183,7 @@ const fetchRain = async () => {
 
             const pty = items.find((it) => it.category === 'PTY')
             if (pty) {
-                ptys[region.id] = PTY_LABELS[pty.obsrValue] ?? `알 수 없음(${pty.obsrValue})`
+                ptys[region.id] = describePrecipitation(pty.obsrValue, rains[region.id])
             }
         } catch (error) {
             console.warn(`${region.name} 강수량 조회 실패, 건너뜀:`, error.message)
@@ -382,6 +394,7 @@ onMounted(fetchAll)
 .detail-header.mode-rain.lv-2 { background: linear-gradient(135deg, #a5d8ff, #74c0fc); }
 .detail-header.mode-rain.lv-3 { background: linear-gradient(135deg, #4dabf7, #339af0); }
 .detail-header.mode-rain.lv-4 { background: linear-gradient(135deg, #339af0, #1864ab); }
+.detail-header.mode-rain.lv-5 { background: linear-gradient(135deg, #1864ab, #0b3866); }
 
 .detail-header.mode-dust.lv-1 { background: linear-gradient(135deg, #63e6be, #38d9a9); }
 .detail-header.mode-dust.lv-2 { background: linear-gradient(135deg, #ffe066, #fcc419); }
@@ -518,7 +531,8 @@ onMounted(fetchAll)
 .mode-rain.lv-1 { background-color: #e9ecef; }
 .mode-rain.lv-2 { background-color: #a5d8ff; }
 .mode-rain.lv-3 { background-color: #4dabf7; }
-.mode-rain.lv-4 { background-color: #1864ab; }
+.mode-rain.lv-4 { background-color: #1c7ed6; }
+.mode-rain.lv-5 { background-color: #0b4a8f; }
 
 .mode-dust.lv-1 { background-color: #63e6be; }
 .mode-dust.lv-2 { background-color: #ffe066; }
